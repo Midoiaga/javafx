@@ -24,11 +24,13 @@ public class Sarea {
             return new Image(stream);
         }
     }
-    public void download(String pUrl, String pTitulua ) throws IOException{
+    public void download(String pUrl) throws IOException{
         pUrl=pUrl.replace("-S","-M");
+        String[] zatiak=pUrl.split("/");
         Properties properties = Utils.lortuEzarpenak();
+        String irudiaPath= properties.getProperty("imagesource")+"/"+zatiak[zatiak.length-1];
         try (InputStream in = new URL(pUrl).openStream()) {
-            Files.copy(in, Paths.get(properties.getProperty("imagesouce")+"/"+pTitulua+".jpg"));
+            Files.copy(in, Paths.get(irudiaPath));
         }
     }
 

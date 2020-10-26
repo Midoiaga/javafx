@@ -45,12 +45,14 @@ public class LiburuKud implements Initializable {
     ZerbitzuKud kud= ZerbitzuKud.getInstance();
     if(ZerbitzuKud.getInstance().tituluosoa(book.getIsbn())==null){
       Book liburua= sarea.readFromUrl(book.getIsbn());
-      kud.informazioa(book.getIsbn(),liburua.getDetails().getTitle(),liburua.getDetails().getPublishers(),liburua.getDetails().getNumber_of_pages(),liburua.getThumbnail_url()+"/"+book.getTitle());
+      String[] zatiak=liburua.getThumbnail_url().split("/");
+      kud.informazioa(book.getIsbn(),liburua.getDetails().getTitle(),liburua.getDetails().getPublishers(),liburua.getDetails().getNumber_of_pages(),zatiak[zatiak.length-1]);
       mainapp.xehetasunakErakutsi(liburua.getDetails().getTitle(),liburua.getDetails().getPublishers(),liburua.getDetails().getNumber_of_pages(),sarea.createImage(liburua.getThumbnail_url()));
-      sarea.download(liburua.getThumbnail_url(), book.getTitle());
+      sarea.download(liburua.getThumbnail_url());
     }
     else {
-      String irudia= "file:///"+kud.irudia(book.getIsbn());
+      Properties properties = Utils.lortuEzarpenak();
+      String irudia= "file:///"+properties.getProperty("imagesource")+"/"+kud.irudia(book.getIsbn());
       Image irudi=sarea.createImage(irudia);
       mainapp.xehetasunakErakutsi(kud.tituluosoa(book.getIsbn()),kud.argitaletxea(book.getIsbn()),kud.orrikop(book.getIsbn()),irudi);
 
