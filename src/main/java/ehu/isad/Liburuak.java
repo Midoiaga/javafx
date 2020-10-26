@@ -1,19 +1,16 @@
 package ehu.isad;
 
-import com.google.gson.Gson;
-import ehu.isad.controller.LiburuKud;
-import ehu.isad.controller.XehetasunakKud;
+import ehu.isad.controller.ui.LiburuKud;
+import ehu.isad.controller.ui.XehetasunakKud;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ehu.isad.Book;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 
 public class Liburuak extends Application {
 
@@ -41,17 +38,19 @@ public class Liburuak extends Application {
 
   private void pantailakKargatu() throws IOException {
 
-    FXMLLoader loaderKautotu = new FXMLLoader(getClass().getResource("/Liburuak.fxml"));
-    liburuUI = (Parent) loaderKautotu.load();
+
+    FXMLLoader loaderXehetasunak = new FXMLLoader(getClass().getResource("/Xehetasunak.fxml"));
+    xehetasunakUI = (Parent) loaderXehetasunak.load();
+    sceneXe = new Scene(xehetasunakUI);
+    xehetasunakKud = loaderXehetasunak.getController();
+    xehetasunakKud.setMainApp(this);
+
+    FXMLLoader loaderLiburua = new FXMLLoader(getClass().getResource("/Liburua.fxml"));
+    liburuUI = (Parent) loaderLiburua.load();
     sceneLib = new Scene(liburuUI,450,450);
-    liburuKud = loaderKautotu.getController();
+    liburuKud = loaderLiburua.getController();
     liburuKud.setMainApp(this);
 
-    FXMLLoader loaderMain = new FXMLLoader(getClass().getResource("/Xehetasunak.fxml"));
-    xehetasunakUI = (Parent) loaderMain.load();
-    sceneXe = new Scene(xehetasunakUI);
-    xehetasunakKud = loaderMain.getController();
-    xehetasunakKud.setMainApp(this);
   }
 
 
@@ -59,8 +58,9 @@ public class Liburuak extends Application {
     launch(args);
   }
 
-  public void xehetasunakErakutsi(String pIzenburua, String pArgitaletxea, String pOrri) {
+  public void xehetasunakErakutsi(String pIzenburua, String pArgitaletxea, String pOrri, Image pIrudia) {
     xehetasunakKud.setLabelIzenburu(pIzenburua);
+    xehetasunakKud.setIrudi(pIrudia);
     xehetasunakKud.setLabelArgitaletxe(pArgitaletxea);
     xehetasunakKud.setLabelOrri(pOrri);
     stage.setScene(sceneXe);

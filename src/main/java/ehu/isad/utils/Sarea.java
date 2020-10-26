@@ -2,14 +2,35 @@ package ehu.isad.utils;
 
 import com.google.gson.Gson;
 import ehu.isad.Book;
+import javafx.scene.image.Image;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 public class Sarea {
+
+    public Image createImage(String url) throws IOException {
+        url=url.replace("-S","-M");
+        URLConnection conn = new URL(url).openConnection();
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36");
+        try (InputStream stream = conn.getInputStream()) {
+            return new Image(stream);
+        }
+    }
+    public void download(String pUrl, String pTitulua ) throws IOException{
+        pUrl=pUrl.replace("-S","-M");
+        Properties properties = Utils.lortuEzarpenak();
+        try (InputStream in = new URL(pUrl).openStream()) {
+            Files.copy(in, Paths.get(properties.getProperty("imagesouce")+"/"+pTitulua+".jpg"));
+        }
+    }
 
     public Book readFromUrl(String isbn) throws IOException {
         URL openlibrary = new URL("https://openlibrary.org/api/books?bibkeys=ISBN:"+isbn+"&jscmd=details&format=json");
